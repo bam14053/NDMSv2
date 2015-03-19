@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<fx:root fx:id="view" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.skobamg.ndmsv2.view.HauptfensterController">
+<children>
+    <MenuBar VBox.vgrow="NEVER">
+         <menus>
+            <Menu mnemonicParsing="false" text="Datei">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#addnew" text="Neu">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../../../icons/smallnew.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" text="Import">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../../../icons/smallimport.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false" text="Export">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../../../icons/smallexport.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" text="Einstellungen">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../../../icons/smallsettings.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" text="Beenden">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../../../icons/smallclose.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Konfiguration">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Portkonfiguration">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../../../icons/smallportkonf.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" text="Vorlagen">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../../../icons/smallvorlagen.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Werkzeug">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Zur Standard-Konfiguration zuruecksetzen">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../../../icons/smallresetstandart.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" text="Diagnose">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../../../icons/smalldiag.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Hilfe">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Benutzerhandbuch">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../../../icons/smallbook.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" text="ueber NDMS">
+                     <graphic>
+                        <ImageView>
+                           <image>
+                              <Image url="@../../../../../../../icons/smallabout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+               </items>
+            </Menu>
+         </menus>
+    </MenuBar>
+      <ToolBar>
+        <items>
+          <Button contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#addnew">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@../../../../../../../icons/new.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Separator orientation="VERTICAL" prefHeight="20.0" />
+            <Button contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#showsnapshotview">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@../../../../../../../icons/import.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Separator orientation="VERTICAL" prefHeight="20.0" />
+            <Button contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#showportview">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@../../../../../../../icons/portkonf.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <ComboBox id="templateBox" fx:id="templateBox" prefWidth="150.0" promptText="Templates" visibleRowCount="5" />
+            <Separator orientation="VERTICAL" prefHeight="20.0" />
+            <Button contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@../../../../../../../icons/diag.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Label alignment="TOP_LEFT" text="Early Alpha Version" textFill="#aeaeae">
+               <padding>
+                  <Insets left="200.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+        </items>
+      </ToolBar>
+      <TabPane id="tabPane" fx:id="tabPane" focusTraversable="false" prefHeight="1080.0" prefWidth="1920.0" tabClosingPolicy="ALL_TABS">
+      </TabPane>
+  </children>
+</fx:root>

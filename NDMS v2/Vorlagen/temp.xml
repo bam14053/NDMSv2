@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template switch-name="12test" switch-version="23">
+    <interface portBezeichnungkurz="asdf" portBezeichnunglang="2dsaf"/>
+    <snippet name="Grundkonfiguration">
+        <section name="Grundeinstellungen">
+            <command execcommand="hostname" name="Hostname" type="String"/>
+            <command execcommand="banner" name="Banner" type="Multi">
+                <parameter execcommand="motd" name="Message of the Day banner">
+                    <parameter name="Delimiting character" type="Delim"/>
+                    <parameter name="Message" type="String"/>
+                </parameter>
+                <parameter execcommand="login" name="Login banner">
+                    <parameter name="Delimiting character" type="Delim"/>
+                    <parameter name="Message" type="String"/>
+                </parameter>
+            </command>
+            <command execcommand="line" name="Konsolenconfiguration" type="Choice">
+                <parameter execcommand="vty" name="Virtual terminal">
+                    <command execcommand="login" name="Einloggen" type="Bool"/>
+                    <command name="Passwort" type="String">
+                        <parameter name="Passwort"/>
+                    </command>
+                    <parameter name="First Line number" type="Integer"/>
+                    <parameter name="Last Line number" type="Integer"/>
+                </parameter>
+                <parameter execcommand="console" name="Console">
+                    <parameter name="First Line number" type="Integer"/>
+                    <parameter name="Last Line number" type="Integer"/>
+                </parameter>
+                <parameter execcommand="null" name="Line">
+                    <parameter name="First Line number" type="Integer"/>
+                    <parameter name="Last Line number" type="Integer"/>
+                </parameter>
+            </command>
+        </section>
+        <section name="Dienste">
+            <command execcommand="service" name="Dienste activieren" type="Multi">
+                <parameter execcommand="dhcp" name="DHCP Server"/>
+                <parameter execcommand="password-recovery" name="Passwort entschlüsseln"/>
+                <parameter name="Passwort wiederherstellung"/>
+                <parameter execcommand="timestamps" name="Timestamps für Debug Nachrichten"/>
+            </command>
+        </section>
+        <section name="Security">
+            <command execcommand="enable password"
+                name="Passwort setzten" type="Choice">
+                <parameter execcommand="null" name="Passwort">
+                    <parameter name="Passwort" type="String"/>
+                </parameter>
+                <parameter execcommand="7" name="Unencrypted password">
+                    <parameter name="Passwort" type="String"/>
+                </parameter>
+                <parameter execcommand="0" name="Encrypted password">
+                    <parameter name="Passwort" type="String"/>
+                </parameter>
+            </command>
+            <command execcommand="enable secret" name="Secret setzen" type="String">
+                <parameter execcommand="null" name="Secret">
+                    <parameter name="Secret" type="String"/>
+                </parameter>
+                <parameter execcommand="0" name="Unencrypted secret">
+                    <parameter name="Passwort" type="String"/>
+                </parameter>
+                <parameter execcommand="5" name="MD5 Hashed Passwort">
+                    <parameter name="Passwort" type="String"/>
+                </parameter>
+                <parameter execcommand="8" name="PBKDF2 Hashed Password">
+                    <parameter name="Passwort" type="String"/>
+                </parameter>
+                <parameter execcommand="9" name="SCRYPT Hashed Passwort">
+                    <parameter name="Passwort" type="String"/>
+                </parameter>
+            </command>
+        </section>
+    </snippet>
+    <snippet name="Interface">
+        <section name="Grundkonfiguration">
+            <command execcommand="interface"
+                name="Interface konfigurieren" type="String">
+                <parameter name="Interface"/>
+                <command execcommand="description"
+                    name="Schnittstelle beschreiben" type="String">
+                    <parameter name="Schnittstellenbeschreibung"/>
+                </command>
+                <command execcommand="duplex"
+                    name="Duplexmodus festlegen" type="Choice">
+                    <parameter execcommand="full" name="full"/>
+                    <parameter execcommand="half" name="half"/>
+                    <parameter execcommand="auto" name="auto"/>
+                </command>
+                <command execcommand="speed" name="Bandbreite festlegen" type="Choice">
+                    <parameter execcommand="auto" name="auto"/>
+                    <parameter execcommand="10" name="10"/>
+                    <parameter execcommand="100" name="100"/>
+                </command>
+            </command>
+        </section>
+        <section name="Vlan">
+            <command execcommand="switchport mode"
+                name="Modus der Schnittstelle" type="Choice">
+                <parameter execcommand="access" name="Mode Access">
+                    <command execcommand="switchport access vlan"
+                        name="Vlan zuordnen" type="Integer">
+                        <parameter name="Vlan Nummer"/>
+                    </command>
+                    <command execcommand="switchport port-security"
+                        name="Port Security" type="Multi">
+                        <parameter execcommand="null" name="Aktivieren"/>
+                        <parameter execcommand="maximum"
+                            name="Maximale Mac-Adressen" type="Integer">
+                            <parameter name="Anzahl"/>
+                        </parameter>
+                        <parameter execcommand="mac-address"
+                            name="statische Mac-Adresse festlegen" type="String">
+                            <parameter name="Adresse"/>
+                        </parameter>
+                        <parameter execcommand="mac address sticky" name="Mac-Adresse dynamisch lernen"/>
+                    </command>
+                </parameter>
+                <parameter execcommand="trunk" name="Mode Trunk"/>
+                <parameter execcommand="dynamic" name="Mode dynamic"/>
+            </command>
+        </section>
+    </snippet>
+</template>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="AddTabWindowController" fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="542.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+			<ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="15.0" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="15.0" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <RadioButton id="rbaddress" fx:id="rbaddress" focusTraversable="false" mnemonicParsing="false" onAction="#iptoggle" selected="true" text="IP-Addresse" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1">
+               <toggleGroup>
+                  <ToggleGroup fx:id="radiotoggle" />
+               </toggleGroup></RadioButton>
+            <RadioButton id="rbrange" fx:id="rbrange" focusTraversable="false" mnemonicParsing="false" onAction="#rangetoggle" selected="false" text="IP-Range" toggleGroup="$radiotoggle" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" /> 
+            <RadioButton id="rboff" fx:id="rboff" focusTraversable="false" mnemonicParsing="false" onAction="#offtoggle" selected="false" text="Offline Session" toggleGroup="$radiotoggle" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+            <Label alignment="CENTER" contentDisplay="CENTER" text="." textAlignment="CENTER" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+            <Label text="." GridPane.columnIndex="10" GridPane.rowIndex="1" />
+            <Label text="." GridPane.columnIndex="8" GridPane.rowIndex="1" />
+            <Label text="." GridPane.columnIndex="6" GridPane.rowIndex="3" />
+            <Label text="." GridPane.columnIndex="8" GridPane.rowIndex="3" />
+            <Label text="." GridPane.columnIndex="10" GridPane.rowIndex="3" />
+            <Label text="." GridPane.columnIndex="6" GridPane.rowIndex="4" />
+            <Label text="." GridPane.columnIndex="8" GridPane.rowIndex="4" />
+            <Label text="." GridPane.columnIndex="10" GridPane.rowIndex="4" />
+            <Button mnemonicParsing="false" onAction="#startconnection" text="Verbinden..." GridPane.columnIndex="9" GridPane.columnSpan="3" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
+            <Label id="vonlabel" fx:id="vonlabel" alignment="TOP_RIGHT" contentDisplay="RIGHT" disable="true" text="Von:" textAlignment="RIGHT" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <Label id="bislabel" fx:id="bislabel" disable="true" text="Bis:" textAlignment="RIGHT" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+            <TextField id="offline1" fx:id="offline1" disable="true" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="6" />
+            <Label id="namelabel" fx:id="namelabel" disable="true" text="Name:" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
+            <Label id="errorlabel" fx:id="errorlabel" text="     " textFill="RED" GridPane.columnIndex="2" GridPane.columnSpan="6" GridPane.rowIndex="9" />
+            <Label id="portanzlabel" fx:id="portanzlabel" disable="true" text="Ports: " GridPane.columnIndex="9" GridPane.rowIndex="6" />
+            <TextField id="portanz" fx:id="portanz" disable="true" GridPane.columnIndex="10" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+            <Label id="typelabel" fx:id="typelabel" disable="true" text="DeviceTyp: " GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+            <Label id="versionlabel" fx:id="versionlabel" disable="true" text="OS Vers:" GridPane.columnIndex="8" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+            <TextField id="type" fx:id="type" disable="true" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="7" />
+            <TextField id="version" fx:id="version" disable="true" GridPane.columnIndex="10" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+         </children>
+      </GridPane>
+   </children>
+</VBox>
