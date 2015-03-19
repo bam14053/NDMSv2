@@ -28,6 +28,23 @@ public class HauptfensterController implements IController{
 	public void newConnection() {
 		mediator.newConnection();
 	}
+	
+	public void open() {
+		//Gespeicherte Session öffnen
+	}
+	
+	public void save() {
+		//Session Speichern
+	}
+	
+	public void saveAs() {
+		//Session speichern unter
+	}
+	
+	public void openSettings() {
+		//In den einstellungen gehen
+		mediator.openSettings();
+	}
 
 	public void updateTemplateList(ArrayList<String> allTemplates) {
 		templateList.getItems().clear();

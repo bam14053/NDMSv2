@@ -5,4 +5,5 @@ public interface IEventMediator {
 	public void setStage(Stage stage);
 	public void loadTemplates();
 	public void newConnection();
+	public void openSettings();
 }

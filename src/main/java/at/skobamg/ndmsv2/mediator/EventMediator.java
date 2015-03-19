@@ -62,4 +62,8 @@ public class EventMediator implements IEventMediator {
 		tempStage.show();
 	}
 
+	public void openSettings() {
+		Windows.loadWindow(Windows.SettingsWindow, );
+	}
+
 }

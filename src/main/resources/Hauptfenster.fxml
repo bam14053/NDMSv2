@@ -18,12 +18,12 @@
           <items>
             <MenuItem mnemonicParsing="false" onAction="#newConnection" text="Neue Verbindung" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#oeffnen" text="Öffnen" />
-            <MenuItem mnemonicParsing="false" onAction="#speichern" text="Speichern" />
-            <MenuItem mnemonicParsing="false" onAction="#speichernUnter" text="Speichern unter" />
+            <MenuItem mnemonicParsing="false" onAction="#open" text="Öffnen" />
+            <MenuItem mnemonicParsing="false" onAction="#save" text="Speichern" />
+            <MenuItem mnemonicParsing="false" onAction="#saveAs" text="Speichern unter" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#einstellungen" text="Einstellungen" />
-            <MenuItem mnemonicParsing="false" onAction="#beenden" text="Beenden" />
+            <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Einstellungen" />
+            <MenuItem mnemonicParsing="false" onAction="#exit" text="Beenden" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Konfiguration">
