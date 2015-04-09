@@ -2,6 +2,9 @@ package at.skobamg.ndmsv2;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import at.skobamg.ndmsv2.logic.ITabsController;
+import at.skobamg.ndmsv2.logic.TabsContoller;
 import at.skobamg.ndmsv2.mediator.EventMediator;
 import at.skobamg.ndmsv2.mediator.IEventMediator;
 import at.skobamg.ndmsv2.model.ITemplateCollection;
@@ -24,5 +27,10 @@ public class MainAppFactory {
 	@Bean
 	public ITemplateCollection templateCollection() {
 		return new TemplateCollection(null);
-	}	
+	}
+	
+	@Bean
+	public ITabsController iTabsController() {
+		return new TabsContoller();
+	}
 }

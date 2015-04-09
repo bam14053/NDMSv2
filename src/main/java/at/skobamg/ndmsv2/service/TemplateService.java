@@ -36,7 +36,7 @@ public class TemplateService implements ITemplateService {
 		for(File file : new File(Directory.vorlagen_directory).listFiles(new XMLFileFilter())){							
 			Element element = db.parse(file).getDocumentElement();
 			if(element.getNodeName().equals(ITemplate.name))
-				templateList.add(new XMLTemplate(element.getAttribute(ITemplate.propertySwitchname), element.getAttribute(ITemplate.propertySwitchversion), file.getName()));
+				templateList.add(new XMLTemplate(element.getAttribute(ITemplate.propertySwitchname), element.getAttribute(ITemplate.propertySwitchversion),  file.getName(), file.getPath()));
 		}
 		return templateList;
 	}

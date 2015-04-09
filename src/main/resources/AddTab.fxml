@@ -3,8 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import at.skobamg.ndmsv2.view.RestrictiveTextField?>
 
-<VBox fx:id="AddTabWindowController" fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="542.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="542.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane>
         <columnConstraints>
@@ -44,6 +46,18 @@
                </toggleGroup></RadioButton>
             <RadioButton id="rbrange" fx:id="rbrange" focusTraversable="false" mnemonicParsing="false" onAction="#rangetoggle" selected="false" text="IP-Range" toggleGroup="$radiotoggle" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" /> 
             <RadioButton id="rboff" fx:id="rboff" focusTraversable="false" mnemonicParsing="false" onAction="#offtoggle" selected="false" text="Offline Session" toggleGroup="$radiotoggle" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+            <RestrictiveTextField id="ipaddress1" fx:id="ipaddress1" disable="false" maxLength="3" restrict="[0-9]" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <RestrictiveTextField id="ipaddress2" fx:id="ipaddress2" disable="false" maxLength="3" restrict="[0-9]" GridPane.columnIndex="7" GridPane.rowIndex="1" />
+            <RestrictiveTextField id="ipaddress3" fx:id="ipaddress3" disable="false" maxLength="3" restrict="[0-9]" GridPane.columnIndex="9" GridPane.rowIndex="1" />
+            <RestrictiveTextField id="ipaddress4" fx:id="ipaddress4" disable="false" maxLength="3" restrict="[0-9]" GridPane.columnIndex="11" GridPane.rowIndex="1" />       
+            <RestrictiveTextField id="iprange1" fx:id="iprange1" disable="true" maxLength="3" restrict="[0-9]" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+            <RestrictiveTextField id="iprange2" fx:id="iprange2" disable="true" maxLength="3" restrict="[0-9]" GridPane.columnIndex="7" GridPane.rowIndex="3" />
+            <RestrictiveTextField id="iprange3" fx:id="iprange3" disable="true" maxLength="3" restrict="[0-9]" GridPane.columnIndex="9" GridPane.rowIndex="3" />
+            <RestrictiveTextField id="iprange4" fx:id="iprange4" disable="true" maxLength="3" restrict="[0-9]" GridPane.columnIndex="11" GridPane.rowIndex="3" />
+            <RestrictiveTextField id="iprange5" fx:id="iprange5" disable="true" maxLength="3" restrict="[0-9]" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+            <RestrictiveTextField id="iprange6" fx:id="iprange6" disable="true" maxLength="3" restrict="[0-9]" GridPane.columnIndex="7" GridPane.rowIndex="4" />
+            <RestrictiveTextField id="iprange7" fx:id="iprange7" disable="true" maxLength="3" restrict="[0-9]" GridPane.columnIndex="9" GridPane.rowIndex="4" />
+            <RestrictiveTextField id="iprange8" fx:id="iprange8" disable="true" maxLength="3" restrict="[0-9]" GridPane.columnIndex="11" GridPane.rowIndex="4" />
             <Label alignment="CENTER" contentDisplay="CENTER" text="." textAlignment="CENTER" GridPane.columnIndex="6" GridPane.rowIndex="1" />
             <Label text="." GridPane.columnIndex="10" GridPane.rowIndex="1" />
             <Label text="." GridPane.columnIndex="8" GridPane.rowIndex="1" />

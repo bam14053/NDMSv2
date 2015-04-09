@@ -1,11 +1,7 @@
 package at.skobamg.ndmsv2;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 import at.skobamg.ndmsv2.mediator.IEventMediator;
-import at.skobamg.ndmsv2.model.Directory;
-import at.skobamg.ndmsv2.model.ITemplateCollection;
-import at.skobamg.ndmsv2.service.TemplateService;
 import at.skobamg.ndmsv2.view.HauptfensterController;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -29,8 +25,9 @@ public class Main extends Application {
 		//Close and get required instances
 		context.close();
 		//Start the window
-		Scene scene = new Scene(hauptfensterController.getView(), 1000, 700);	
 		mediator.setStage(stage);
+		
+		Scene scene = new Scene(hauptfensterController.getView(), 1000, 700);
 		stage.setScene(scene);
 		stage.sizeToScene();
 		stage.setTitle("NDMS v2"); // Title of program

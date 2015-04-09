@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#tasteGedrueckt" prefHeight="206.0" prefWidth="335.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="11.0" layoutY="17.0" text="Bitte Zugangsdaten für den Switch eingeben" textFill="#fc0a0a">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Button layoutX="260.0" layoutY="165.0" mnemonicParsing="false" onAction="#weiter" prefHeight="30.0" prefWidth="62.0" text="Weiter" />
+      <TextField fx:id="username" layoutX="75.0" layoutY="47.0" promptText="Username">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="passwort" layoutX="75.0" layoutY="85.0" promptText="Passwort">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </PasswordField>
+      <PasswordField fx:id="secret" layoutX="76.0" layoutY="125.0" promptText="Secret">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </PasswordField>
+   </children>
+</Pane>

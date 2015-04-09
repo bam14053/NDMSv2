@@ -47,7 +47,7 @@
     </MenuBar>
       <ToolBar>
         <items>
-          <Button mnemonicParsing="false">
+          <Button mnemonicParsing="false" onAction="#newConnection">
                <graphic>
                   <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -56,7 +56,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false">
+            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#open">
                <graphic>
                   <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -65,7 +65,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="262.0" layoutY="10.0" mnemonicParsing="false">
+            <Button layoutX="262.0" layoutY="10.0" mnemonicParsing="false" onAction="#save">
                <graphic>
                   <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -84,6 +84,15 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Button mnemonicParsing="false" onAction="#openConsole">
+               <graphic>
+                  <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Icons/console.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
             <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" text="Early Alpha Version" textAlignment="CENTER" textFill="#0000008a">
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -94,7 +103,7 @@
             </Label>
         </items>
       </ToolBar>
-      <TabPane focusTraversable="false" prefHeight="1080.0" prefWidth="1920.0" tabClosingPolicy="ALL_TABS" />
+      <TabPane focusTraversable="false" prefHeight="1080.0" prefWidth="1920.0" tabClosingPolicy="ALL_TABS" fx:id="tabpane"/>
   </children>
   <stylesheets>
     <URL value="@Hauptfenster.css" />
