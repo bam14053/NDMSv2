@@ -2,13 +2,8 @@ package at.skobamg.ndmsv2.model;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import at.skobamg.ndmsv2.mediator.IEventMediator;
 
 public class ConsoleOutput extends OutputStream {
 	private StringProperty consoleText = new SimpleStringProperty("");

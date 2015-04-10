@@ -160,7 +160,9 @@ public class EventMediator implements IEventMediator {
 
 	@Override
 	public void updateTemplateList(ArrayList<String> templates) {
-		hauptfensterController.updateTemplateList(templates);
+		Platform.runLater(()->{
+			hauptfensterController.updateTemplateList(templates);
+		});		
 	}
 
 	@Override
@@ -168,18 +170,17 @@ public class EventMediator implements IEventMediator {
 		
 		//Bind the tab interfaces to the Buttons;
 		ArrayList<Button> ports = new ArrayList<Button>();
-		int i = 0;
 		for(IInterface inter : interfaces) {
 			Button port = new Button(inter.getPortnameShort());
 			port.styleProperty().bind(inter.portstatusProperty());
-			port.setUserData(i);
+			port.setOnAction(hauptfensterController);
+			port.setUserData(inter);
 			Platform.runLater(() -> {
 				Tooltip tooltip = new Tooltip();
 				tooltip.textProperty().bind(inter.tooltipTextProperty());
 				port.setTooltip(tooltip);
 			});	
 			ports.add(port);
-			i++;
 		}
 				
 		Platform.runLater(() -> {

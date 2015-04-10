@@ -15,6 +15,7 @@ public class Interface implements IInterface {
 	private StringProperty tooltipText = new SimpleStringProperty("");
 	private StringProperty runningConfig = new SimpleStringProperty("");
 	private HashMap<String, String> interfaceData = new HashMap<String, String>();
+	private boolean bound;
 	
 	//Static Variables
 	public static final String HEADER_INTERFACE = "interface";
@@ -32,10 +33,15 @@ public class Interface implements IInterface {
 		return portstatus.get(); 
 	}
 	
-	private void setPortStatus(String status) {		
-		portstatus.set(status);			
-		if(tooltipText.isBound())
+	private void setPortStatus(String status) {	
+		if(!isBound())
+			portstatus.set(status);
+		else{
+			Platform.runLater(()->{
+				portstatus.set(status);
+			});
 			generateTooltipText();
+		}			
 	}
 	
 	public void determinePortStatus() {	
@@ -48,16 +54,23 @@ public class Interface implements IInterface {
 				break;
 			case down:
 				setPortStatus("-fx-base: #FFFF00;");
+				break;
+			default:
 				break;			
 			}
 			break;
 		case down:
 			setPortStatus("-fx-base: #954535;");
 			break;
+		case administratively:
+			setPortStatus("-fx-base: #660000");
+			break;
 		}
 	}
 	
 	public StringProperty portstatusProperty() {
+		bound = true;
+		generateTooltipText();
 		return portstatus;
 	}
 	
@@ -129,14 +142,19 @@ public class Interface implements IInterface {
 
 	@Override
 	public void generateTooltipText() {
+		if(status == null || protocol == null) return;
 		String tooltip = "Fullname: "+portnameLong+"\n"
 				+"Shortname: "+portnameShort+"\n"
-				+"IP-Address: "+ipaddress+"\n"
+				+"IP-Address: "+ipaddress+"\n"	
 				+"Status: "+status+"\n"
 				+"Protocol: "+protocol;
 		for(String key : interfaceData.keySet().toArray(new String[interfaceData.size()]))
 			tooltip += "\n"+key+": "+interfaceData.get(key);	
-		tooltipText.set(tooltip);		
+		
+		final String tooltipfinal = tooltip;
+		Platform.runLater(()->{
+			tooltipText.set(tooltipfinal);
+		});		
 	}
 
 	@Override
@@ -150,7 +168,7 @@ public class Interface implements IInterface {
 	}
 
 	@Override
-	public void setRunningConfig(String text) {
+	public void setRunningConfig(String text) {		
 		runningConfig.set(text);
 	}
 
@@ -171,6 +189,8 @@ public class Interface implements IInterface {
 		return true;
 	}
 
-	
+	public boolean isBound() {
+		return bound;
+	}
 	
 }

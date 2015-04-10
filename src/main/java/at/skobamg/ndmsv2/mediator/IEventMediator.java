@@ -1,9 +1,7 @@
 package at.skobamg.ndmsv2.mediator;
 
 import java.util.ArrayList;
-
 import at.skobamg.ndmsv2.model.IInterface;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public interface IEventMediator {

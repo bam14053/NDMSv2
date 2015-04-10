@@ -1,14 +1,14 @@
 package at.skobamg.ndmsv2.model;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import com.jcraft.jsch.Channel;
-
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
 import at.skobamg.generator.model.ISnippet;
 import at.skobamg.generator.model.ITemplate;
 import at.skobamg.ndmsv2.logic.IntDataExtractorCommand;
@@ -26,30 +26,26 @@ public class Tab implements ITab{
 	private StringProperty consoleText = new SimpleStringProperty();	
 	private ArrayList<IInterface> interfaces;
 	private ConsoleOutput consoleOutput;
+	private PipedOutputStream consoleInput;
 	private ArrayList<String> templates;
 	private ITemplate template;
 	private ISnippet interfaceSnippet;
-	private volatile boolean lockConsole;
-	private Timer timer;
-	private Channel shellChannel;
+	private TabSession tabSession;
+	private TabService tabService;
 	
-	public Tab(String tabName, ArrayList<IInterface> interfaces, ConsoleOutput consoleOutput, Channel shellChannel,
-			ArrayList<String> templates, ITemplate template) {
+	public Tab(String tabName, ArrayList<IInterface> interfaces,
+			String[] sessionInfo, ArrayList<String> templates, ITemplate template){
 		super();
 		this.tabName = tabName;
 		this.interfaces = interfaces;
-		this.shellChannel = shellChannel;
-		this.consoleOutput = consoleOutput;
 		this.templates = templates;
-		this.template = template;
-		timer = new Timer(tabName);
+		this.template = template;					
+		tabSession = new TabSession(sessionInfo[0], sessionInfo[1], sessionInfo[2], sessionInfo[3]);
 		
-		//Starting logic
-		consoleOutput.resetOutput();
-		consoleOutput.consoleTextProperty().addListener(this);
 		for(ISnippet snippet : template.getSnippets())
-			if(snippet.isBindInterface()) setInterfaceSnippet(snippet);
-		timer.scheduleAtFixedRate(new TabService(), TabsContoller.TAB_WAIT_PERIOD, TabsContoller.TAB_WAIT_PERIOD);
+			if(snippet.isBindInterface()) setInterfaceSnippet(snippet);		
+		Thread thread = new Thread((tabService = new TabService()));
+		thread.start();
 	}
 
 	public final String getConsoleText() { return consoleText.get(); }
@@ -64,14 +60,6 @@ public class Tab implements ITab{
 	
 	public void setTemplate(ITemplate template) {
 		this.template = template;
-	}
-	
-	public boolean isLockConsole() {
-		return lockConsole;
-	}
-	
-	public void setLockConsole(boolean lockConsole) {
-		this.lockConsole = lockConsole;
 	}
 	
 	public String getTabName() {
@@ -90,11 +78,7 @@ public class Tab implements ITab{
 	@Override
 	public void sendCommand(String command){
 		try {
-			if(!lockConsole) {
-				shellChannel.getInputStream().close();
-				new PipedOutputStream((PipedInputStream)shellChannel.getInputStream()).write((command+"\n").getBytes());
-			}
-//				consoleInput.write((command+"\n").getBytes());
+			consoleInput.write((command+"\n").getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -103,8 +87,7 @@ public class Tab implements ITab{
 	@Override
 	public void changed(ObservableValue<? extends String> arg0, String arg1,
 			String arg2) {
-		if(lockConsole) return;
-		else if( (arg2.endsWith(tabName+">") || arg2.endsWith(tabName+"#")) && !arg2.equals(arg1)) {
+		if( (arg2.endsWith(tabName+">") || arg2.endsWith(tabName+"#")) && !arg2.equals(arg1)) {
 			consoleText.set(consoleText.get()+"\n"+arg2);
 		}			
 	}
@@ -122,74 +105,128 @@ public class Tab implements ITab{
 		this.interfaceSnippet = interfaceSnippet;
 	}
 	
-	class TabService extends TimerTask{
-		private boolean startDataExtraction = true;
+	class TabSession {
+		private String host;
+		private String username;
+		private String password;
+		private String secret;		
+		
+		public TabSession(String host, String username, String password,
+				String secret) {
+			super();
+			this.host = host;
+			this.username = username;
+			this.password = password;
+			this.secret = secret;			
+		}
+	}
+	
+	class TabService implements Runnable{
 		IntStatusExtractorCommand intStatusExtractorCommand;
 		IntDataExtractorCommand intDataExtractorCommand;
+		ConsoleOutput serviceConsoleOutput;
+		PipedOutputStream serviceConsoleInput;
+		Session session;
+		Channel channel;
+		boolean startDataExtraction;
+		boolean stop;
+		long refresh_rate = TabsContoller.TAB_NORMAL_PRIORITY;		
 		
-		@Override
-		public boolean cancel() {
-			if(intDataExtractorCommand.isRunning())
-				intDataExtractorCommand.cancel();
-			if(intStatusExtractorCommand.isRunning())
-				intStatusExtractorCommand.cancel();
-			getConsoleOutput().resetOutput();
-			setLockConsole(false);
-			return super.cancel();
+		void sendCommand(String command) {
+			try {
+				serviceConsoleInput.write((command+"\n").getBytes());
+			} catch (IOException e) {
+				session.disconnect();
+				startConnection();
+				sendCommand(command);
+			}
 		}
 		
 		@Override
 		public void run() {
-			if(startDataExtraction && getConsoleOutput().getConsoleText().isEmpty() && !isLockConsole()){
-				consoleOutput.resetOutput();
-				sendCommand("show running-config");
-				setLockConsole(true);		
-				while(!getConsoleOutput().getConsoleText().endsWith(getTabName()+">") && !getConsoleOutput().getConsoleText().endsWith(getTabName()+"#"));
-				startDataExtraction = false;
-				intDataExtractorCommand = new IntDataExtractorCommand(consoleOutput.getConsoleText(), interfaceSnippet, interfaces);
-				intDataExtractorCommand.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-					@Override
-					public void handle(WorkerStateEvent arg0) {
-						getConsoleOutput().resetOutput();
-						setLockConsole(false);			
-						while(!getConsoleOutput().getConsoleText().isEmpty() || isLockConsole());								
-						getConsoleOutput().resetOutput();
-						sendCommand("show ip interface brief");								
-						setLockConsole(true);
-						while(!getConsoleOutput().getConsoleText().endsWith(getTabName()+">") && !getConsoleOutput().getConsoleText().endsWith(getTabName()+"#"));
-						intStatusExtractorCommand = new IntStatusExtractorCommand(interfaces, StringParser.extractInterfaceInformation(template.getInterfaces(), getConsoleOutput().getConsoleText(), tabName));
-						intStatusExtractorCommand.setOnSucceeded(new CustomHandler());
-						intStatusExtractorCommand.setOnFailed(new CustomHandler());
-						intStatusExtractorCommand.start();
-					}
-				});	
-				intDataExtractorCommand.setOnFailed(new CustomHandler());
-				intDataExtractorCommand.start();
-				
+			while(!stop) {
+				if(session == null || !session.isConnected()) {
+					startConnection();
+				}
+				else if(startDataExtraction) {	
+					try {
+						Thread.sleep(refresh_rate);
+					} catch (InterruptedException e) {}
+					//Reset the output, send the command and wait for an answer
+					serviceConsoleOutput.resetOutput();
+					sendCommand("show running-config");					
+					while(!serviceConsoleOutput.getConsoleText().endsWith(tabName+">") && !serviceConsoleOutput.getConsoleText().endsWith(tabName+"#") || serviceConsoleOutput.getConsoleText().isEmpty());
+								
+					intDataExtractorCommand = new IntDataExtractorCommand(serviceConsoleOutput.getConsoleText(), interfaceSnippet, interfaces);
+					intDataExtractorCommand.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+						@Override
+						public void handle(WorkerStateEvent arg0) {
+							new Thread(new Runnable() {								
+								@Override
+								public void run() {
+									serviceConsoleOutput.resetOutput();
+									sendCommand("show ip interface brief");								
+									while(!serviceConsoleOutput.getConsoleText().endsWith(getTabName()+">") && !serviceConsoleOutput.getConsoleText().endsWith(getTabName()+"#") || serviceConsoleOutput.getConsoleText().isEmpty());
+									intStatusExtractorCommand = new IntStatusExtractorCommand(interfaces, StringParser.extractInterfaceInformation(template.getInterfaces(), serviceConsoleOutput.getConsoleText(), tabName));
+									intStatusExtractorCommand.setOnSucceeded(new CustomHandler());
+									intStatusExtractorCommand.setOnFailed(new CustomHandler());
+									intStatusExtractorCommand.start();
+								}
+							}).start();							
+						}
+					});	
+					intDataExtractorCommand.setOnFailed(new CustomHandler());
+					startDataExtraction = false;
+					intDataExtractorCommand.start();
+				}
+							
 			}
 		}
-		
+			
+		private void startConnection() {
+			//Create a new channel to start sending commands through		
+			try {
+				JSch jSch = new JSch();
+				session = jSch.getSession(tabSession.username, tabSession.host);
+				session.setPassword(tabSession.password);
+				session.setConfig("StrictHostKeyChecking", "no");
+				session.connect();
+				
+				channel = session.openChannel("shell");		
+				InputStream in = new PipedInputStream();				
+				serviceConsoleInput = new PipedOutputStream((PipedInputStream)in );
+				serviceConsoleOutput = new ConsoleOutput();
+				channel.setInputStream(in, true);
+				channel.setOutputStream(serviceConsoleOutput);
+				channel.connect();
+				
+				sendCommand("enable");					
+				sendCommand(tabSession.secret);
+				sendCommand("terminal length 0\n");
+				
+				startDataExtraction = true;
+				
+			}
+			 catch (JSchException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		class CustomHandler implements EventHandler<WorkerStateEvent>{
 
 			@Override
 			public void handle(WorkerStateEvent event) {
-				getConsoleOutput().resetOutput();
-				setLockConsole(false);								
+				serviceConsoleOutput.resetOutput();
 				startDataExtraction = true;
 			}
 			
 		}
-		
 	}
 
-	@Override
-	public void refreshTab(long refresh_rate) {
-		timer.cancel();
-		timer.scheduleAtFixedRate(new TabService(), refresh_rate, refresh_rate);
-	}
-
-	public Channel getShellChannel() {
-		return shellChannel;
-	}
+//		tabService.stopExecution();
+//		Thread thread = new Thread((tabService = new TabService(refresh_rate)));
+//		thread.start();
 	
 }

@@ -27,4 +27,5 @@ public interface IInterface {
 	public String getRunningConfig();
 	public StringProperty runningConfigProperty();
 	public void setRunningConfig(String text);
+	public boolean isBound();
 }

@@ -37,7 +37,8 @@ public class IntDataExtractorCommand extends Service<Void> {
 					for(int i = 0; i < lines.length; i++) {
 						if(lines[i].equalsIgnoreCase(intCommand.getExeccommand()+" "+interfaces.get(i2).getPortnameLong())) {			
 							while(!lines[++i].equals("!"))
-								intData += lines[i]+"\n"; 
+								intData += "\t"+lines[i]+"\n"; 
+							if(!intData.isEmpty()) interfaces.get(i2).setRunningConfig(intCommand.getExeccommand()+" "+interfaces.get(i2).getPortnameLong()+"\n"+intData);
 							for(String data : intData.split("\n")) {
 								if(!data.isEmpty())
 									for(ISection section : interfaceSnippet.getSections()) {

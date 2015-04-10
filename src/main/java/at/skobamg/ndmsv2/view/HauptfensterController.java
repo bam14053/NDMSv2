@@ -1,22 +1,20 @@
 package at.skobamg.ndmsv2.view;
 
 import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import at.skobamg.ndmsv2.mediator.IEventMediator;
 import at.skobamg.ndmsv2.model.IInterface;
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -26,7 +24,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
-public class HauptfensterController implements IController{
+public class HauptfensterController implements IController, EventHandler<ActionEvent>{
 	@Autowired
 	private IEventMediator mediator;
 	@FXML
@@ -115,6 +113,7 @@ public class HauptfensterController implements IController{
 		templateList.getItems().clear();
 		for(String templateName : allTemplates)
 			templateList.getItems().add(templateName);
+		templateList.getSelectionModel().select(0);
 	}
 	
 	public void newCommandLine(String commandLine) {
@@ -130,6 +129,28 @@ public class HauptfensterController implements IController{
 		text.setFill(Paint.valueOf(Color.BEIGE.toString()));
 		consoleText.getChildren().add(text);
 		consoleText.layout();
-		scrollPane.layout();
+		scrollPane.layout();	
+	}
+	
+	@Override
+	public void handle(ActionEvent event) {
+		IInterface selectedInterface = (IInterface) ((Button)event.getSource()).getUserData();		
+		
+		Stage stage = new Stage();
+		TextArea textArea = new TextArea(selectedInterface.getRunningConfig());
+		textArea.setEditable(false);
+		stage.setScene(new Scene(textArea, 300, 200));
+		stage.setTitle("Running config for port "+selectedInterface.getPortnameShort());
+		stage.initOwner(mediator.getStage());
+		stage.centerOnScreen();
+		stage.setAlwaysOnTop(true);
+		stage.show();
 	}
 }
+
+
+
+
+
+
+

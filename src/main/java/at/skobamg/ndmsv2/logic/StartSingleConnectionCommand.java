@@ -100,7 +100,8 @@ public class StartSingleConnectionCommand extends Service<Void> {
 					ArrayList<IInterface> interfaces = extractInterfaces(template);
 					updateMessage("Interface information loaded into program");
 					updateProgress(1, 1);
-					tabsContoller.addTab(hostname, interfaces, consoleOutput, channel, templates, template);
+					session.disconnect();
+					tabsContoller.addTab(hostname, interfaces, new String[] {host,username,password,secret}, templates, template);					
 				} catch (ParserConfigurationException | SAXException | IOException e) {
 					throw new Exception("Error parsing template, please check whether the template is valid");
 				} catch (InvalidTypeException e) {
