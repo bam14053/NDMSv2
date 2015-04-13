@@ -155,7 +155,7 @@ public class Tab implements ITab{
 					//Reset the output, send the command and wait for an answer
 					serviceConsoleOutput.resetOutput();
 					sendCommand("show running-config");					
-					while(!serviceConsoleOutput.getConsoleText().endsWith(tabName+">") && !serviceConsoleOutput.getConsoleText().endsWith(tabName+"#") || serviceConsoleOutput.getConsoleText().isEmpty());
+					while(!serviceConsoleOutput.getConsoleText().endsWith(tabName+"#") || serviceConsoleOutput.getConsoleText().split("\n").length < 10);
 								
 					intDataExtractorCommand = new IntDataExtractorCommand(serviceConsoleOutput.getConsoleText(), interfaceSnippet, interfaces);
 					intDataExtractorCommand.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
@@ -166,7 +166,7 @@ public class Tab implements ITab{
 								public void run() {
 									serviceConsoleOutput.resetOutput();
 									sendCommand("show ip interface brief");								
-									while(!serviceConsoleOutput.getConsoleText().endsWith(getTabName()+">") && !serviceConsoleOutput.getConsoleText().endsWith(getTabName()+"#") || serviceConsoleOutput.getConsoleText().isEmpty());
+									while(!serviceConsoleOutput.getConsoleText().endsWith(getTabName()+"#") || serviceConsoleOutput.getConsoleText().split("\n").length < 10);
 									intStatusExtractorCommand = new IntStatusExtractorCommand(interfaces, StringParser.extractInterfaceInformation(template.getInterfaces(), serviceConsoleOutput.getConsoleText(), tabName));
 									intStatusExtractorCommand.setOnSucceeded(new CustomHandler());
 									intStatusExtractorCommand.setOnFailed(new CustomHandler());

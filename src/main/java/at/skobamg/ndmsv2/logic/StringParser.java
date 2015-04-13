@@ -102,20 +102,28 @@ public class StringParser {
 			}else{
 				for(String port : parseInterfaceRange(interf.getPortBezeichnunglang().toLowerCase(), interf.getPortRange())) {
 					for(String line : lines) {
-						if(line.contains(port)) {
+						if(line.split(" ")[0].equalsIgnoreCase(port)) {
 							at.skobamg.ndmsv2.model.IInterface confInterface = new Interface();
-							String[] parts = line.split("\t");
+							ArrayList<String> stringTemp = new ArrayList<String>();
+							for(String temp : line.split(" "))
+									if(!temp.isEmpty()) stringTemp.add(temp);
+							String[] parts = stringTemp.toArray(new String[stringTemp.size()]);
 							for(int i = 0; i < parts.length; i++) {
+								if(!headers.containsKey(i)) continue;
 								switch(headers.get(i)) {
 								case Interface.HEADER_INTERFACE:
-									confInterface.setPortnameLong(port);
-									confInterface.setPortnameShort(port.replace(interf.getPortBezeichnunglang().toLowerCase(), interf.getPortBezeichnungkurz().toLowerCase()));
+									confInterface.setPortnameLong(parts[i]);
+									confInterface.setPortnameShort(parts[i].replace(interf.getPortBezeichnunglang().toLowerCase(), interf.getPortBezeichnungkurz().toLowerCase()));
+									break;
 								case Interface.HEADER_IPADDRESS:
 									confInterface.setIpaddress(parts[i]);
+									break;
 								case Interface.HEADER_PROTOCOL:
 									confInterface.setProtocolStatus(Portstatus.valueOf(parts[i]));
+									break;
 								case Interface.HEADER_STATUS:
 									confInterface.setStatus(Portstatus.valueOf(parts[i]));
+									break;
 								}
 							}
 							confInterfaces.add(confInterface);
