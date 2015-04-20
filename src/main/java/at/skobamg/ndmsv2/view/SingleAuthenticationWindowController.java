@@ -2,7 +2,6 @@
  * 
  */
 package at.skobamg.ndmsv2.view;
-import sun.security.util.Password;
 import at.skobamg.ndmsv2.mediator.IEventMediator;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,13 +9,13 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -76,6 +75,7 @@ public class SingleAuthenticationWindowController implements IController {
 		vBox.getChildren().add(hBox);
 		VBox.setMargin(hBox, new Insets(0, 0, 0, 200));
 		yes.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
 			public void handle(ActionEvent arg0) {				
 				mediator.startSingleConnection(ipAddress, username.getText(), passwort.getText(), secret.getText());
 				stage.close();
@@ -83,6 +83,7 @@ public class SingleAuthenticationWindowController implements IController {
 		});
 		no.setCancelButton(true);		
 		no.setOnAction(new EventHandler<ActionEvent>() {			
+			@Override
 			public void handle(ActionEvent arg0) {
 				stage.close();
 			}
@@ -95,7 +96,8 @@ public class SingleAuthenticationWindowController implements IController {
 	/* (non-Javadoc)
 	 * @see at.skobamg.ndmsv2.view.IController#getView()
 	 */
-	public Pane getView() {
+	@Override
+	public Control getView() {
 		return null;
 	}
 

@@ -10,102 +10,107 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="view" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.skobamg.ndmsv2.view.HauptfensterController">
-  <children>
-    <MenuBar VBox.vgrow="NEVER">
-      <menus>
-        <Menu mnemonicParsing="false" text="Datei">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#newConnection" text="Neue Verbindung" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#open" text="Öffnen" />
-            <MenuItem mnemonicParsing="false" onAction="#save" text="Speichern" />
-            <MenuItem mnemonicParsing="false" onAction="#saveAs" text="Speichern unter" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Einstellungen" />
-            <MenuItem mnemonicParsing="false" onAction="#exit" text="Beenden" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Konfiguration">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Portkonfiguration" />
-            <MenuItem mnemonicParsing="false" text="Vorlagen anzeigen" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Werkzeug">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Zurücksetzen" />
-                  <MenuItem mnemonicParsing="false" text="Diagnose" />
-          </items>
-        </Menu>
-            <Menu mnemonicParsing="false" text="Hilfe">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Hilfe" />
-               </items>
-            </Menu>
-      </menus>
-    </MenuBar>
-      <ToolBar>
-        <items>
-          <Button mnemonicParsing="false" onAction="#newConnection">
-               <graphic>
-                  <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Icons/new.jpeg" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#open">
-               <graphic>
-                  <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Icons/open.jpg" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button layoutX="262.0" layoutY="10.0" mnemonicParsing="false" onAction="#save">
-               <graphic>
-                  <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Icons/save.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <ComboBox fx:id="templateList" prefWidth="150.0" />
-            <Button mnemonicParsing="false">
-               <graphic>
-                  <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Icons/diagnose.jpg" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button mnemonicParsing="false" onAction="#openConsole">
-               <graphic>
-                  <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Icons/console.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" text="Early Alpha Version" textAlignment="CENTER" textFill="#0000008a">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <padding>
-                  <Insets left="100.0" />
-               </padding>
-            </Label>
-        </items>
-      </ToolBar>
-      <TabPane focusTraversable="false" prefHeight="1080.0" prefWidth="1920.0" tabClosingPolicy="ALL_TABS" fx:id="tabpane"/>
-  </children>
-  <stylesheets>
-    <URL value="@Hauptfenster.css" />
-  </stylesheets>
-</VBox>
+
+<SplitPane fx:id="view" dividerPositions="0.7" orientation="VERTICAL" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.skobamg.ndmsv2.view.HauptfensterController">
+   <items>
+      <VBox>
+        <children>
+          <MenuBar VBox.vgrow="NEVER">
+            <menus>
+              <Menu mnemonicParsing="false" text="Datei">
+                <items>
+                  <MenuItem mnemonicParsing="false" onAction="#newConnection" text="Neue Verbindung" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#open" text="Öffnen" />
+                  <MenuItem mnemonicParsing="false" onAction="#save" text="Speichern" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveAs" text="Speichern unter" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Einstellungen" />
+                  <MenuItem mnemonicParsing="false" onAction="#exit" text="Beenden" />
+                </items>
+              </Menu>
+              <Menu mnemonicParsing="false" text="Konfiguration">
+                <items>
+                  <MenuItem mnemonicParsing="false" text="Portkonfiguration" />
+                  <MenuItem mnemonicParsing="false" text="Vorlagen anzeigen" />
+                </items>
+              </Menu>
+              <Menu mnemonicParsing="false" text="Werkzeug">
+                <items>
+                  <MenuItem mnemonicParsing="false" text="Zurücksetzen" />
+                        <MenuItem mnemonicParsing="false" text="Diagnose" />
+                </items>
+              </Menu>
+                  <Menu mnemonicParsing="false" text="Hilfe">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Hilfe" />
+                     </items>
+                  </Menu>
+            </menus>
+          </MenuBar>
+            <ToolBar>
+              <items>
+                <Button mnemonicParsing="false" onAction="#newConnection">
+                     <graphic>
+                        <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Icons/new.jpeg" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#open">
+                     <graphic>
+                        <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Icons/open.jpg" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="262.0" layoutY="10.0" mnemonicParsing="false" onAction="#save">
+                     <graphic>
+                        <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Icons/save.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <ComboBox fx:id="templateList" prefWidth="150.0" />
+                  <Button mnemonicParsing="false">
+                     <graphic>
+                        <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Icons/diagnose.jpg" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#openConsole">
+                     <graphic>
+                        <ImageView fitHeight="70.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Icons/console.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" text="Early Alpha Version" textAlignment="CENTER" textFill="#0000008a">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="100.0" />
+                     </padding>
+                  </Label>
+              </items>
+            </ToolBar>
+            <TabPane fx:id="tabpane" focusTraversable="false" prefHeight="1080.0" prefWidth="1920.0" tabClosingPolicy="ALL_TABS" />
+        </children>
+        <stylesheets>
+          <URL value="@Hauptfenster.css" />
+        </stylesheets>
+      </VBox>
+   </items>
+</SplitPane>

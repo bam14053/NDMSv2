@@ -14,10 +14,12 @@ public class XMLTemplate implements IXMLTemplate {
 		this.filePath = filePath;
 	}
 
+	@Override
 	public String getTemplateInfo() {
 		return switchName+"-"+switchVersion;
 	}
 
+	@Override
 	public String getFileName() {
 		return fileName;
 	}

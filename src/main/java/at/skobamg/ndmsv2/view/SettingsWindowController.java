@@ -1,9 +1,10 @@
 package at.skobamg.ndmsv2.view;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Control;
 
 public class SettingsWindowController implements IController {
 	
-	public Pane getView() {
+	@Override
+	public Control getView() {
 		return null;
 	}
 

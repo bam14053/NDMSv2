@@ -1,11 +1,11 @@
 package at.skobamg.ndmsv2.view;
 import at.skobamg.ndmsv2.mediator.IEventMediator;
 import javafx.fxml.FXML;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.Pane;
 
 public class AddTabWindowController implements IController{
 	@FXML
@@ -68,7 +68,8 @@ public class AddTabWindowController implements IController{
 		this.mediator = mediator;
 	}
 	
-	public Pane getView() {
+	@Override
+	public Control getView() {
 		return null;
 	}
 	

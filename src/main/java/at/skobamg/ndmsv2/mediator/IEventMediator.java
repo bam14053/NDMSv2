@@ -1,7 +1,10 @@
 package at.skobamg.ndmsv2.mediator;
 
 import java.util.ArrayList;
+
 import at.skobamg.ndmsv2.model.IInterface;
+import javafx.scene.Node;
+import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
 public interface IEventMediator {
@@ -15,7 +18,11 @@ public interface IEventMediator {
 	public void displayMessage(String message);
 	public void startSingleConnection(String ipAddress, String username, String password, String secret);
 	public void openSingleAuthenticationWindow(String IPAddress);
-	public void newCommandLine(String commandLine);
-	public void newMessageLine(String messageLine);
+	public void newMessage(String message);
 	public void addTab(String tabName, ArrayList<IInterface> interfaces);
+	public void setInterfaceCommandHierachy(IInterface interf, String tabName);
+	public void generateCommandHierachy(String tabName);
+	public void saveChangestoSwitch(String tabName, TreeItem<Node> hierachy);
+	public String getConsoleTextFromTab(String tabName);
+
 }

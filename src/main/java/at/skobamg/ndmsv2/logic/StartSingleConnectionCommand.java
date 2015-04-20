@@ -6,45 +6,50 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
+
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.xml.sax.SAXException;
+
 import at.skobamg.generator.model.ITemplate;
 import at.skobamg.generator.model.InvalidTypeException;
 import at.skobamg.generator.service.TemplateService;
 import at.skobamg.ndmsv2.model.ConsoleOutput;
 import at.skobamg.ndmsv2.model.IInterface;
+import at.skobamg.ndmsv2.model.ITab;
 import at.skobamg.ndmsv2.model.ITemplateCollection;
+import at.skobamg.ndmsv2.model.Tab;
+
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
-public class StartSingleConnectionCommand extends Service<Void> {
+public class StartSingleConnectionCommand extends Service<ITab> {
 	private String host, username, password, secret;
-	private ITabsController tabsContoller;
 	private ITemplateCollection templateCollection;
 	private ConsoleOutput consoleOutput;
 	private PipedOutputStream consoleInput;
 	private String hostname;
 	
-	public StartSingleConnectionCommand(ITabsController tabsContoller, ITemplateCollection templateCollection, 
+	public StartSingleConnectionCommand(ITemplateCollection templateCollection, 
 			String host, String username, String password, String secret) {
 		super();
 		this.host = host;
 		this.username = username;
 		this.password = password;
 		this.secret = secret;
-		this.tabsContoller = tabsContoller;
 		this.templateCollection = templateCollection;
 	}
 
 	@Override
-	protected Task<Void> createTask() {
-		return new Task<Void>() {
+	protected Task<ITab> createTask() {
+		return new Task<ITab>() {
 
 			@Override
-			protected Void call() throws Exception {
+			protected ITab call() throws Exception {
 				JSch jSch = new JSch();
 				Session session = jSch.getSession(username, host);
 				session.setPassword(password);
@@ -101,13 +106,12 @@ public class StartSingleConnectionCommand extends Service<Void> {
 					updateMessage("Interface information loaded into program");
 					updateProgress(1, 1);
 					session.disconnect();
-					tabsContoller.addTab(hostname, interfaces, new String[] {host,username,password,secret}, templates, template);					
+					return new Tab(hostname, interfaces, new String[] {host,username,password,secret}, templates, template);
 				} catch (ParserConfigurationException | SAXException | IOException e) {
 					throw new Exception("Error parsing template, please check whether the template is valid");
 				} catch (InvalidTypeException e) {
 					throw new Exception ("Invalid parameter type in the template, error message: "+e.getMessage());
-				}								
-				return null;
+				}
 			}
 			
 			ArrayList<IInterface> extractInterfaces(ITemplate template) throws Exception{	

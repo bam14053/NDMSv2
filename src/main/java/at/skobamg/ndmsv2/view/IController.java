@@ -1,7 +1,7 @@
 package at.skobamg.ndmsv2.view;
 
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Control;
 
 public interface IController {
-	public Pane getView();
+	public Control getView();
 }

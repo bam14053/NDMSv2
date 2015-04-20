@@ -29,6 +29,7 @@ public class Interface implements IInterface {
 			});
 	}
 	
+	@Override
 	public final String getPortstatus() { 
 		return portstatus.get(); 
 	}
@@ -44,6 +45,7 @@ public class Interface implements IInterface {
 		}			
 	}
 	
+	@Override
 	public void determinePortStatus() {	
 		if(protocol == null || status == null) return;
 		switch (status) {		
@@ -68,37 +70,45 @@ public class Interface implements IInterface {
 		}
 	}
 	
+	@Override
 	public StringProperty portstatusProperty() {
 		bound = true;
 		generateTooltipText();
 		return portstatus;
 	}
 	
+	@Override
 	public String getPortnameLong() {
 		return portnameLong;
 	}
 	
+	@Override
 	public void setPortnameLong(String portnameLong) {
 		this.portnameLong = portnameLong;
 	}
 	
+	@Override
 	public String getPortnameShort() {
 		return portnameShort;
 	}
 	
+	@Override
 	public void setPortnameShort(String portnameShort) {
 		this.portnameShort = portnameShort;
 	}
 	
+	@Override
 	public String getIpaddress() {
 		return ipaddress;
 	}
 	
+	@Override
 	public void setIpaddress(String ipaddress) {
 		this.ipaddress = ipaddress;
 		generateTooltipText();
 	}
 	
+	@Override
 	public void setStatus(Portstatus status) {
 		this.status = status;
 		determinePortStatus();
@@ -148,8 +158,10 @@ public class Interface implements IInterface {
 				+"IP-Address: "+ipaddress+"\n"	
 				+"Status: "+status+"\n"
 				+"Protocol: "+protocol;
-		for(String key : interfaceData.keySet().toArray(new String[interfaceData.size()]))
-			tooltip += "\n"+key+": "+interfaceData.get(key);	
+		for(String key : interfaceData.keySet().toArray(new String[interfaceData.size()])) {
+			if(interfaceData.get(key).equals("no") || interfaceData.get(key).isEmpty());
+			else tooltip += "\n"+key+": "+interfaceData.get(key);	
+		}
 		
 		final String tooltipfinal = tooltip;
 		Platform.runLater(()->{
@@ -189,6 +201,7 @@ public class Interface implements IInterface {
 		return true;
 	}
 
+	@Override
 	public boolean isBound() {
 		return bound;
 	}

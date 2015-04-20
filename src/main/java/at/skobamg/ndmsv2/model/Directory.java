@@ -1,8 +1,5 @@
 package at.skobamg.ndmsv2.model;
 import java.io.File;
-import java.net.URL;
-
-import at.skobamg.ndmsv2.view.Windows;
 
 public class Directory {
 	public static String home_directory = System.getProperty("user.dir");

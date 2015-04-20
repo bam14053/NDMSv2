@@ -44,6 +44,7 @@ public class RestrictiveTextField extends TextField
 
 			private boolean ignore;
 
+			@Override
 			public void changed(
 					ObservableValue<? extends String> observableValue,
 					String s, String s1)

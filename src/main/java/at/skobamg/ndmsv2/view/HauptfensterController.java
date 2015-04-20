@@ -4,20 +4,29 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import at.skobamg.ndmsv2.mediator.IEventMediator;
 import at.skobamg.ndmsv2.model.IInterface;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -28,25 +37,71 @@ public class HauptfensterController implements IController, EventHandler<ActionE
 	@Autowired
 	private IEventMediator mediator;
 	@FXML
-	private VBox view;
+	private SplitPane view;
+	private TreeView<Node> tree = new TreeView<Node>();
+	private BorderPane view2;
 	@FXML
 	private ComboBox<String> templateList;
 	@FXML
 	private TabPane tabpane;
 	private Stage stage = new Stage();
 	private TextFlow consoleText = new TextFlow(new Text());
-	ScrollPane scrollPane = new ScrollPane(consoleText);
+	ScrollPane consoleScroll = new ScrollPane(consoleText);
 	
-	public Pane getView() {		
+	@Override
+	public SplitPane getView() {				
 		//Initialize the console window	    
-		scrollPane.setStyle("-fx-background-color: #000000;");
-		scrollPane.setFitToHeight(true);
-		scrollPane.setFitToWidth(true);		
+		consoleScroll.setStyle("-fx-background-color: #000000;");
+		consoleScroll.setFitToHeight(true);
+		consoleScroll.setFitToWidth(true);	
+		
+		Button button = new Button("Änderungen einspielen");
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				mediator.saveChangestoSwitch(tabpane.getSelectionModel().getSelectedItem().getText(), tree.getRoot());
+			}
+		});
+		
+		FlowPane flowPane = new FlowPane(button);
+		flowPane.setAlignment(Pos.BASELINE_RIGHT);		
+		view2 = new BorderPane(tree, null, null, flowPane, null);
+		
+		view.heightProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable,
+					Number oldValue, Number newValue) {
+				view2.setPrefHeight(newValue.doubleValue());
+			}
+		});
 		
 		consoleText.setStyle("-fx-background-color: #000000;");
 		consoleText.setLineSpacing(0);
-	    
-		stage.setScene(new Scene(scrollPane, 300, 200));
+		
+		tabpane.selectionModelProperty().addListener(new ChangeListener<SingleSelectionModel<Tab>>() {
+			@Override
+			public void changed(
+					ObservableValue<? extends SingleSelectionModel<Tab>> observable, 
+							SingleSelectionModel<Tab> oldValue, SingleSelectionModel<Tab> newValue) {
+				mediator.generateCommandHierachy(newValue.getSelectedItem().getText());
+				consoleText.getChildren().clear();
+				String message = mediator.getConsoleTextFromTab(newValue.getSelectedItem().getText());
+				for(String line : message.split("\n"))
+					if(line.endsWith(newValue.getSelectedItem().getText()+">") || line.endsWith(newValue.getSelectedItem().getText()+"#"))
+						newCommandLine(line);
+					else
+						newMessageLine(line);				
+				
+			}
+		});
+		tabpane.getTabs().addListener(new ListChangeListener<Tab>() {
+			@Override
+			public void onChanged(
+					javafx.collections.ListChangeListener.Change<? extends Tab> c) {
+				if(tabpane.getTabs().isEmpty()) view.getItems().remove(view2);
+			}
+		});
+		stage.setScene(new Scene(consoleScroll, 300, 200));
 		stage.setTitle("Console Window");
 		stage.initOwner(mediator.getStage());
 		stage.centerOnScreen();
@@ -59,9 +114,27 @@ public class HauptfensterController implements IController, EventHandler<ActionE
 		mediator.newConnection();
 	}
 	
+	public void setCommandHierachy(TreeItem<Node> hierachy) {
+		tree.setRoot(hierachy);
+	}
+	
 	public void addNewTab(String tabName, ArrayList<Button> ports) {
-		Tab tab = new Tab(tabName);
-		GridPane gridPane = new GridPane();
+		if(tabpane.getTabs().size() == 0)
+			view.getItems().add(view2);
+		//Creating required controls		
+		Tab tab = new Tab(tabName);	
+		Button refresh = new Button("Befehlshierachie Neu Laden");
+		refresh.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				mediator.generateCommandHierachy(tabName);
+			}
+		});
+		FlowPane flowPane = new FlowPane(refresh);
+		flowPane.setAlignment(Pos.BASELINE_RIGHT);
+		GridPane gridPane = new GridPane();	
+		gridPane.setAlignment(Pos.CENTER);
+		BorderPane borderPane = new BorderPane(gridPane, null, null, flowPane, null);
 		int row = 0;
 		int col = 0;
 		for(Button port : ports) {
@@ -78,14 +151,25 @@ public class HauptfensterController implements IController, EventHandler<ActionE
 				row++;
 			}
 		}
-		tab.setContent(gridPane);
+		
+		tab.setContent(borderPane);
 		tabpane.getTabs().add(tab);
-		tabpane.getSelectionModel().select(tab);
+		tabpane.getSelectionModel().select(tab);			
 	}
 	
 	public void openConsole(ActionEvent actionEvent) {
 		if(stage.isShowing()) mediator.displayMessage("The Console window is already open");
-		else stage.show();
+		else{
+			stage.show();
+			consoleText.getChildren().clear();
+			String message = mediator.getConsoleTextFromTab(tabpane.getSelectionModel().getSelectedItem().getText());
+			for(String line : message.split("\n"))
+				if(line.endsWith(tabpane.getSelectionModel().getSelectedItem().getText()+">") || 
+						line.endsWith(tabpane.getSelectionModel().getSelectedItem().getText()+"#"))
+					newCommandLine(line);
+				else
+					newMessageLine(line);
+		}
 	}
 	
 	public void open() {
@@ -120,21 +204,18 @@ public class HauptfensterController implements IController, EventHandler<ActionE
 		Text text = new Text(commandLine);
 		text.setFill(Paint.valueOf(Color.LIGHTBLUE.toString()));
 		consoleText.getChildren().add(text);
-		consoleText.layout();
-		scrollPane.layout();
 	}
 	
 	public void newMessageLine(String messageLine) {
 		Text text = new Text(messageLine);
 		text.setFill(Paint.valueOf(Color.BEIGE.toString()));
 		consoleText.getChildren().add(text);
-		consoleText.layout();
-		scrollPane.layout();	
 	}
 	
 	@Override
 	public void handle(ActionEvent event) {
 		IInterface selectedInterface = (IInterface) ((Button)event.getSource()).getUserData();		
+		mediator.setInterfaceCommandHierachy(selectedInterface, tabpane.getSelectionModel().getSelectedItem().getText());
 		
 		Stage stage = new Stage();
 		TextArea textArea = new TextArea(selectedInterface.getRunningConfig());
@@ -142,10 +223,10 @@ public class HauptfensterController implements IController, EventHandler<ActionE
 		stage.setScene(new Scene(textArea, 300, 200));
 		stage.setTitle("Running config for port "+selectedInterface.getPortnameShort());
 		stage.initOwner(mediator.getStage());
-		stage.centerOnScreen();
 		stage.setAlwaysOnTop(true);
 		stage.show();
 	}
+		
 }
 
 

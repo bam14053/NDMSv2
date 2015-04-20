@@ -22,8 +22,16 @@ public class TabsContoller implements ITabsController{
 	@Override
 	public void addTab(String tabName, ArrayList<IInterface> interfaces,
 			String[] sessionInfo, ArrayList<String> templates, ITemplate template) {
-		tabs.put(tabName, new Tab(tabName, interfaces, sessionInfo, templates, template));
-		eventMediator.addTab(tabName, interfaces);
-		eventMediator.updateTemplateList(templates);			
+		tabs.put(tabName, new Tab(tabName, interfaces, sessionInfo, templates, template));			
+	}
+
+	@Override
+	public void addTab(ITab tab) {
+		tabs.put(tab.getTabName(), tab);
+	}
+	
+	@Override
+	public ITab getTabByName(String name) {
+		return tabs.get(name);
 	}
 }

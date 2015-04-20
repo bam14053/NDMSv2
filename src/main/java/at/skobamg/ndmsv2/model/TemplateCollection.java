@@ -9,6 +9,7 @@ public class TemplateCollection implements ITemplateCollection {
 		templateList = templates;
 	}
 	
+	@Override
 	public ArrayList<String> getTemplatesofSwitch(String switchName,
 			String switchVersion) {
 		ArrayList<String> templates = new ArrayList<String>();
@@ -18,6 +19,7 @@ public class TemplateCollection implements ITemplateCollection {
 		return templates;
 	}
 	
+	@Override
 	public void setTemplateList(ArrayList<IXMLTemplate> templateList) {
 		this.templateList = templateList;
 	}

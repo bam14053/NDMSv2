@@ -21,6 +21,7 @@ public class TemplateService implements ITemplateService {
 	
 	class XMLFileFilter implements FilenameFilter{
 
+		@Override
 		public boolean accept(File dir, String name) {
 			if(name.endsWith(".xml"))
 				return true;
@@ -29,6 +30,7 @@ public class TemplateService implements ITemplateService {
 		
 	}
 	
+	@Override
 	public ArrayList<IXMLTemplate> getTemplatesDefault() throws ParserConfigurationException, SAXException, IOException {
 		ArrayList<IXMLTemplate> templateList = new ArrayList<IXMLTemplate>();
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
