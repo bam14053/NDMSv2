@@ -6,7 +6,9 @@ import at.skobamg.ndmsv2.logic.ITabsController;
 import at.skobamg.ndmsv2.logic.TabsContoller;
 import at.skobamg.ndmsv2.mediator.EventMediator;
 import at.skobamg.ndmsv2.mediator.IEventMediator;
+import at.skobamg.ndmsv2.model.ISnapshotCollection;
 import at.skobamg.ndmsv2.model.ITemplateCollection;
+import at.skobamg.ndmsv2.model.SnapshotCollection;
 import at.skobamg.ndmsv2.model.TemplateCollection;
 import at.skobamg.ndmsv2.view.HauptfensterController;
 import at.skobamg.ndmsv2.view.Windows;
@@ -17,6 +19,11 @@ public class MainAppFactory {
 	@Bean
 	public HauptfensterController hauptfensterController() {
 		return (HauptfensterController) Windows.controllerLaden(Windows.MainWindow);
+	}
+	
+	@Bean
+	public ISnapshotCollection snapshotCollection(){
+		return new SnapshotCollection();
 	}
 	
 	@Bean

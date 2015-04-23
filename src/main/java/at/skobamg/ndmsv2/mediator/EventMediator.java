@@ -1,18 +1,25 @@
 package at.skobamg.ndmsv2.mediator;
 
 import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import at.skobamg.ndmsv2.logic.GenerateCommandHierachyCommand;
+import at.skobamg.ndmsv2.logic.GroupSnapshotsCommand;
 import at.skobamg.ndmsv2.logic.ITabsController;
 import at.skobamg.ndmsv2.logic.LoadTemplatesCommand;
 import at.skobamg.ndmsv2.logic.ParseHierachyCommand;
 import at.skobamg.ndmsv2.logic.StartSingleConnectionCommand;
 import at.skobamg.ndmsv2.model.IInterface;
+import at.skobamg.ndmsv2.model.ISnapshot;
+import at.skobamg.ndmsv2.model.ISnapshotCollection;
 import at.skobamg.ndmsv2.model.ITab;
 import at.skobamg.ndmsv2.model.ITemplateCollection;
 import at.skobamg.ndmsv2.model.IXMLTemplate;
+import at.skobamg.ndmsv2.view.AddTabWindowController;
 import at.skobamg.ndmsv2.view.HauptfensterController;
 import at.skobamg.ndmsv2.view.SingleAuthenticationWindowController;
+import at.skobamg.ndmsv2.view.SnapshotWindowController;
 import at.skobamg.ndmsv2.view.Windows;
 import javafx.application.Platform;
 import javafx.concurrent.WorkerStateEvent;
@@ -34,13 +41,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class EventMediator implements IEventMediator {
+public class EventMediator implements IEventMediator{
 	@Autowired
 	private HauptfensterController hauptfensterController;
 	@Autowired
 	private ITemplateCollection templateCollection;
 	@Autowired
 	private ITabsController tabsContoller;	
+	@Autowired
+	private ISnapshotCollection snapshotCollection;
 	private Stage stage;
 	private Stage tempStage;	
 	
@@ -51,7 +60,14 @@ public class EventMediator implements IEventMediator {
 
 	@Override
 	public void displayMessage(String message) {
-		System.out.println(message);
+		Stage stage = new Stage();			
+		Label label = new Label(message);
+		label.setWrapText(true);
+		stage.setScene(new Scene(label, 200, 200));
+		stage.initOwner(this.stage);
+		stage.setResizable(false);
+		stage.sizeToScene();
+		stage.show();
 	}
 	
 	@Override
@@ -64,13 +80,12 @@ public class EventMediator implements IEventMediator {
 
 	@Override
 	public void newConnection() {
-		startSingleConnection("192.168.2.2", "test", "test", "test");
-//		tempStage = new Stage();
-//		tempStage.initOwner(stage);
-//		tempStage.setScene(new Scene(Windows.loadWindow(Windows.AddTab, new AddTabWindowController(this))));
-//		tempStage.setResizable(false);
-//		tempStage.sizeToScene();		
-//		tempStage.show();
+		tempStage = new Stage();
+		tempStage.initOwner(stage);
+		tempStage.setScene(new Scene(Windows.loadWindow(Windows.AddTab, new AddTabWindowController(this))));
+		tempStage.setResizable(false);
+		tempStage.sizeToScene();		
+		tempStage.show();
 	}
 
 	@Override
@@ -101,7 +116,7 @@ public class EventMediator implements IEventMediator {
 
 	@Override
 	public void startSingleConnection(String host, String username, String password, String secret) {
-//		tempStage.close();		
+		tempStage.close();		
 		StartSingleConnectionCommand startSingleConnectionCommand = new StartSingleConnectionCommand(templateCollection, host, username, password, secret);
 		
 		//Create Progress Bar for task
@@ -168,10 +183,10 @@ public class EventMediator implements IEventMediator {
 	}
 
 	@Override
-	public void newMessage(String message) {
-		Platform.runLater(() -> {
+	public void newMessageLine(String message) {
+		Platform.runLater(()-> {
 			hauptfensterController.newMessageLine(message);
-		});
+		});		
 	}
 
 	@Override
@@ -194,8 +209,7 @@ public class EventMediator implements IEventMediator {
 			port.setTooltip(tooltip);
 			ports.add(port);
 		}	
-		hauptfensterController.addNewTab(tabName, ports);
-		
+		hauptfensterController.addNewTab(tabName, ports);		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -229,7 +243,10 @@ public class EventMediator implements IEventMediator {
 				yes.setDefaultButton(true);
 				no.setCancelButton(true);
 				no.setOnAction((event2)-> stage.close());
-				yes.setOnAction((event2)-> tabsContoller.getTabByName(tabName).sendCommandsToSwitch((String) event.getSource().getValue()));
+				yes.setOnAction((event2)-> {
+					tabsContoller.getTabByName(tabName).sendCommandsToSwitch((String) event.getSource().getValue());									
+					stage.close();
+				});
 				
 				TextArea textArea = new TextArea((String) event.getSource().getValue());
 				textArea.setEditable(false);				
@@ -247,5 +264,51 @@ public class EventMediator implements IEventMediator {
 	@Override
 	public String getConsoleTextFromTab(String tabName) {
 		return tabsContoller.getTabByName(tabName).getConsoleText();
+	}
+
+	@Override
+	public void newCommandLine(String command) {
+		Platform.runLater(()->{
+			hauptfensterController.newCommandLine(command);
+		});		
+	}
+
+	@Override
+	public void listenToTab(String tabName) {
+		tabsContoller.addListenerToTab(tabName);
+	}
+
+	@Override
+	public void openSnapshotManager(String tabName) {
+		String switchName = tabsContoller.getTabByName(tabName).getTemplate().getSwitchName();
+		String switchVersion = tabsContoller.getTabByName(tabName).getTemplate().getSwitchVersion();
+		TreeItem<Object> root = new TreeItem<Object>();
+		for(ISnapshot snapshot : snapshotCollection.getSnapshots(switchName, switchVersion))
+			root.getChildren().add(new TreeItem<Object>(snapshot));
+		tempStage = new Stage();		
+		tempStage.setScene(new Scene(Windows.loadWindow(Windows.SnapshotWindow, new SnapshotWindowController(this, root, tabName))));
+		tempStage.initOwner(stage);
+		tempStage.initModality(Modality.APPLICATION_MODAL);
+		tempStage.sizeToScene();
+		tempStage.show();
+	}
+
+	@Override
+	public void openSnapshotManager() {
+		GroupSnapshotsCommand groupSnapshotsCommand = new GroupSnapshotsCommand(snapshotCollection.getAllSnapshots());
+		groupSnapshotsCommand.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void handle(WorkerStateEvent event) {
+				tempStage = new Stage();		
+				tempStage.setScene(new Scene(Windows.loadWindow(Windows.SnapshotWindow, new SnapshotWindowController(EventMediator.this, (TreeItem<Object>) event.getSource().getValue()))));
+				tempStage.initOwner(stage);
+				tempStage.initModality(Modality.APPLICATION_MODAL);
+				tempStage.sizeToScene();
+				tempStage.show();
+			}
+		});
+		groupSnapshotsCommand.start();
 	}
 }

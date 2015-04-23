@@ -7,7 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 public enum Windows {
-	MainWindow, AddTab, SettingsWindow, SingleAuthenticationWindow;
+	MainWindow, AddTab, SettingsWindow, SingleAuthenticationWindow, SnapshotWindow;
 	
 	public static IController controllerLaden(Windows window) {		
 		FXMLLoader loader = new FXMLLoader(getWindow(window));
@@ -45,6 +45,8 @@ public enum Windows {
 		case SingleAuthenticationWindow:
 			windowFileName = "SingleAuthenticationWindow.fxml";
 			break;
+		case SnapshotWindow:
+			windowFileName = "SnapshotWindow.fxml";
 		}
 		return Thread.currentThread().getContextClassLoader().getResource(windowFileName);
 	}

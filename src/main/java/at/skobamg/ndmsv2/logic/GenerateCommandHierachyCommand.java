@@ -117,7 +117,7 @@ public class GenerateCommandHierachyCommand extends Service<TreeItem<Node>> {
 						case Delim:
 							RestrictiveTextField delim = new RestrictiveTextField();
 							delim.setPromptText(parameter2.getName());							
-							delim.setRestrict("{0,2}");					
+							delim.setMaxLength(1);
 							delim.setUserData(parameter2); //USER DATA
 							hbox.getChildren().add(delim);
 						default:
@@ -158,7 +158,7 @@ public class GenerateCommandHierachyCommand extends Service<TreeItem<Node>> {
 						case Delim:
 							RestrictiveTextField delim = new RestrictiveTextField();
 							delim.setPromptText(parameter.getName());
-							delim.setRestrict("{0,2}");				
+							delim.setMaxLength(1);				
 							delim.setUserData(parameter); //USER DATA
 							hbox.getChildren().add(delim);
 						default:

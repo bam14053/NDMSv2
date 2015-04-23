@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
@@ -20,9 +19,11 @@ public class SendConfigurationService implements Runnable {
 	private String secret;
 	private String commands;
 	private PipedOutputStream consoleInput;
+	private Session session;
+	private Channel channel;
 	private ConsoleOutput consoleOutput = new ConsoleOutput();
 	
-	public SendConfigurationService(TabSession tabSession, String commands) {
+	public SendConfigurationService(String commands, TabSession tabSession) {
 		this.commands = commands;
 		host = tabSession.getSessionData()[0];
 		username = tabSession.getSessionData()[1];
@@ -37,29 +38,32 @@ public class SendConfigurationService implements Runnable {
 	@Override
 	public void run() {
 		startConnection();
-		for(String command : commands.split("\n"))
-			sendCommand(command);
+			for(String command : commands.split("\n"))
+				sendCommand(command+"\n");
+		channel.disconnect();
+		session.disconnect();
 	}	
 	
 	private void startConnection() {
 		//Create a new channel to start sending commands through		
 		try {
 			JSch jSch = new JSch();
-			Session session = jSch.getSession(username, host);
+			session = jSch.getSession(username, host);
 			session.setPassword(password);
 			session.setConfig("StrictHostKeyChecking", "no");
 			session.connect();
 			
-			Channel channel = session.openChannel("shell");		
+			channel = session.openChannel("shell");		
 			InputStream in = new PipedInputStream();				
 			consoleInput = new PipedOutputStream((PipedInputStream)in );
 			channel.setInputStream(in, true);
 			channel.setOutputStream(consoleOutput);
 			channel.connect();
 			
-			sendCommand("enable "+secret+"\n");
+			sendCommand("enable\n");
+			sendCommand(secret+"\n");
 			sendCommand("terminal length 0\n");
-						
+			sendCommand("configure terminal\n");
 		}
 		 catch (JSchException e) {
 			e.printStackTrace();

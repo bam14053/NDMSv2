@@ -29,7 +29,7 @@ import javafx.event.EventHandler;
 
 public class Tab implements ITab{
 	private String tabName;
-	private StringProperty consoleText = new SimpleStringProperty();	
+	private StringProperty consoleText = new SimpleStringProperty("");	
 	private ArrayList<IInterface> interfaces;
 	private ArrayList<String> templates;
 	private ITemplate template;
@@ -52,10 +52,13 @@ public class Tab implements ITab{
 			if(snippet.isBindInterface()) setInterfaceSnippet(snippet);		
 		new Thread((tabInterfacesService = new TabInterfacesService())).start();
 		new Thread((tabDataService) = new TabDataService()).start();
+		tabInterfacesService.getClass();
 	}
 
+	@Override
 	public final String getConsoleText() { return consoleText.get(); }
 	
+	@Override
 	public StringProperty consoleTextProperty() {
 		return consoleText;
 	}
@@ -87,9 +90,10 @@ public class Tab implements ITab{
 	
 	@Override
 	public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-		if( (arg2.endsWith(tabName+">") || arg2.endsWith(tabName+"#")) && !arg2.equals(arg1)) {
-			consoleText.set(consoleText.get()+arg2+"\n");
-		}
+		if(arg2.endsWith("\n"))
+			consoleText.set(consoleText.get()+arg2);		
+		else if(arg2.endsWith(tabName+">") || arg2.endsWith(tabName+"#")) 
+			consoleText.set(consoleText.get()+arg2+"\n");		
 	}
 	
 	@Override
@@ -303,15 +307,9 @@ public class Tab implements ITab{
 
 	@Override
 	public void sendCommandsToSwitch(String commands) {
-		SendConfigurationService sendConfigurationService = new SendConfigurationService(tabSession, commands);
+		SendConfigurationService sendConfigurationService = new SendConfigurationService(commands, tabSession);
 		sendConfigurationService.getConsoleOutput().consoleTextProperty().addListener(this);
 		new Thread(sendConfigurationService).start();
 	}
-
-	
-
-//		tabService.stopExecution();
-//		Thread thread = new Thread((tabService = new TabService(refresh_rate)));
-//		thread.start();
 	
 }

@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.HBox?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
 
-<HBox prefHeight="439.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.bmlvs.NDMS.presentation.SnapshotController">
-   <children>
-      <VBox prefHeight="439.0" prefWidth="239.0">
-         <children>
-            <VBox prefHeight="31.0" prefWidth="237.0">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SnapshotWindowController">
+   <center>
+      <TextArea fx:id="snapshot_text" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+   <left>
+      <BorderPane id="send_snapshot" BorderPane.alignment="CENTER_LEFT">
+         <top>
+            <HBox alignment="CENTER_LEFT" fillHeight="false" nodeOrientation="LEFT_TO_RIGHT" snapToPixel="false" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
                <children>
-                  <HBox prefHeight="33.0" prefWidth="237.0">
-                     <children>
-                        <Button focusTraversable="false" mnemonicParsing="false" onAction="#addsnapshot">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true">
-                              	<image>
-                        			<Image url="@../../../../../../../icons/plus.png" />
-                   			  	</image>
-                    		</ImageView>
-                           </graphic></Button>
-                        <Button id="removebtn" fx:id="removebtn" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#removesnapshot">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true">
-                              	<image>
-                        			<Image url="@../../../../../../../icons/minus.png" />
-                   			  	</image>
-                    		</ImageView>
-                           </graphic></Button>
-                     </children>
-                  </HBox>
+                  <Button mnemonicParsing="false" onAction="#addSnapshot">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Icons/add.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#deleteSnapshot">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Icons/delete.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
-            </VBox>
-            <ListView id="snapshotlist" fx:id="snapshotlist" focusTraversable="false" prefHeight="415.0" prefWidth="237.0" />
-            <Button contentDisplay="RIGHT" focusTraversable="false" mnemonicParsing="false" onAction="#einspielen" prefHeight="23.0" prefWidth="97.0" text="Einspielen">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </VBox.margin>
-            </Button>
-         </children>
-      </VBox>
-      <TextArea id="descArea" fx:id="descArea" editable="false" focusTraversable="false" minHeight="439.0" minWidth="422.0" prefHeight="439.0" prefWidth="422.0">
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </TextArea>
-   </children>
-</HBox>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <effect>
+                  <Blend />
+               </effect>
+            </HBox>
+         </top>
+         <center>
+            <TreeView fx:id="snapshotList" showRoot="false" BorderPane.alignment="CENTER" />
+         </center>
+         <bottom>
+            <Button fx:id="snapshot_button" defaultButton="true" mnemonicParsing="false" onAction="#sendSnapshot" text="Snapshot einspielen" visible="false" BorderPane.alignment="CENTER" />
+         </bottom>
+      </BorderPane>
+   </left>
+</BorderPane>

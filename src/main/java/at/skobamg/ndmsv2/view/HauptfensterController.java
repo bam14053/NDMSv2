@@ -91,7 +91,7 @@ public class HauptfensterController implements IController, EventHandler<ActionE
 						newCommandLine(line);
 					else
 						newMessageLine(line);				
-				
+				mediator.listenToTab(newValue.getSelectedItem().getText());
 			}
 		});
 		tabpane.getTabs().addListener(new ListChangeListener<Tab>() {
@@ -116,6 +116,13 @@ public class HauptfensterController implements IController, EventHandler<ActionE
 	
 	public void setCommandHierachy(TreeItem<Node> hierachy) {
 		tree.setRoot(hierachy);
+	}
+	
+	public void openSnapshotManager() {
+		if(tabpane.getTabs().size() > 0)
+			mediator.openSnapshotManager(tabpane.getSelectionModel().getSelectedItem().getText());
+		else
+			mediator.openSnapshotManager();
 	}
 	
 	public void addNewTab(String tabName, ArrayList<Button> ports) {
@@ -154,26 +161,22 @@ public class HauptfensterController implements IController, EventHandler<ActionE
 		
 		tab.setContent(borderPane);
 		tabpane.getTabs().add(tab);
-		tabpane.getSelectionModel().select(tab);			
+		tabpane.getSelectionModel().select(tab);	
+		mediator.listenToTab(tabName);
 	}
 	
 	public void openConsole(ActionEvent actionEvent) {
 		if(stage.isShowing()) mediator.displayMessage("The Console window is already open");
-		else{
-			stage.show();
-			consoleText.getChildren().clear();
-			String message = mediator.getConsoleTextFromTab(tabpane.getSelectionModel().getSelectedItem().getText());
-			for(String line : message.split("\n"))
-				if(line.endsWith(tabpane.getSelectionModel().getSelectedItem().getText()+">") || 
-						line.endsWith(tabpane.getSelectionModel().getSelectedItem().getText()+"#"))
-					newCommandLine(line);
-				else
-					newMessageLine(line);
-		}
+		else stage.show();
 	}
 	
 	public void open() {
 		//Gespeicherte Session öffnen
+	}
+	
+	public void closeConnection() {
+		if(tabpane.getTabs().size() > 0)
+			tabpane.getTabs().remove(tabpane.getSelectionModel().getSelectedItem());
 	}
 	
 	public void save() {

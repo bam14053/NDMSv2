@@ -1,7 +1,9 @@
 package at.skobamg.ndmsv2;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import at.skobamg.ndmsv2.mediator.IEventMediator;
+import at.skobamg.ndmsv2.service.StartupManager;
 import at.skobamg.ndmsv2.view.HauptfensterController;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -20,7 +22,7 @@ public class Main extends Application {
 		HauptfensterController hauptfensterController = context.getBean(HauptfensterController.class);
 		IEventMediator mediator = context.getBean(IEventMediator.class);
 		//Load all the templates into the program		
-//		Directory.verzeichnisseErstellen();
+		new StartupManager();
 		mediator.loadTemplates();		
 		//Close and get required instances
 		context.close();

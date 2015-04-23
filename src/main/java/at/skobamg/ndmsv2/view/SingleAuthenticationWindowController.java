@@ -40,23 +40,19 @@ public class SingleAuthenticationWindowController implements IController {
 	
 	@FXML
     public void tasteGedrueckt(KeyEvent keyEvent) {
-		if(keyEvent.getCode().equals(KeyCode.TAB)) {
+		if(keyEvent.getCode().equals(KeyCode.TAB))
 			if(passwort.isFocused()) secret.requestFocus();
 			else if (secret.isFocused()) username.requestFocus();
-		}
-		if(keyEvent.getCode().equals(KeyCode.ENTER)) {
-			if(passwort.getText().isEmpty() || secret.getText().isEmpty() || username.getText().isEmpty()){
-				displayConfirmation();
-			}
-		}
-		
+		if(keyEvent.getCode().equals(KeyCode.ENTER)) 
+			if(passwort.getText().isEmpty() || secret.getText().isEmpty() || username.getText().isEmpty())
+				displayConfirmation();		
     }
 	
 	@FXML
 	public void weiter() {
-		if(passwort.getText().isEmpty() || secret.getText().isEmpty() || username.getText().isEmpty()){
+		if(passwort.getText().isEmpty() || secret.getText().isEmpty() || username.getText().isEmpty())
 			displayConfirmation();
-		}else
+		else
 			mediator.startSingleConnection(ipAddress, username.getText(), passwort.getText(), secret.getText());
 	}
 
@@ -74,20 +70,12 @@ public class SingleAuthenticationWindowController implements IController {
 		vBox.getChildren().add(label);	
 		vBox.getChildren().add(hBox);
 		VBox.setMargin(hBox, new Insets(0, 0, 0, 200));
-		yes.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {				
-				mediator.startSingleConnection(ipAddress, username.getText(), passwort.getText(), secret.getText());
-				stage.close();
-			}
+		yes.setOnAction((event)->{			 
+			mediator.startSingleConnection(ipAddress, username.getText(), passwort.getText(), secret.getText());
+			stage.close(); 
 		});
 		no.setCancelButton(true);		
-		no.setOnAction(new EventHandler<ActionEvent>() {			
-			@Override
-			public void handle(ActionEvent arg0) {
-				stage.close();
-			}
-		});
+		no.setOnAction((event)->stage.close());
 		stage.setScene(new Scene(vBox));
 		stage.sizeToScene();
 		stage.show();

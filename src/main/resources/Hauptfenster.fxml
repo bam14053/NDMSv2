@@ -20,32 +20,34 @@
               <Menu mnemonicParsing="false" text="Datei">
                 <items>
                   <MenuItem mnemonicParsing="false" onAction="#newConnection" text="Neue Verbindung" />
+                  <MenuItem mnemonicParsing="false" onAction="#closeConnection" text="Verbindung Schließen" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#open" text="Öffnen" />
                   <MenuItem mnemonicParsing="false" onAction="#save" text="Speichern" />
                   <MenuItem mnemonicParsing="false" onAction="#saveAs" text="Speichern unter" />
+                  <MenuItem mnemonicParsing="false" text="Vorlage Importieren"/>
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Einstellungen" />
                   <MenuItem mnemonicParsing="false" onAction="#exit" text="Beenden" />
                 </items>
+              </Menu>              
+              <Menu mnemonicParsing="false" text="Bearbeiten">
+              	<items>
+	              	<MenuItem mnemonicParsing="false" text="Diagnose" />
+	              	<MenuItem mnemonicParsing="false" text="Zurücksetzen"/>
+	            </items>              	
               </Menu>
-              <Menu mnemonicParsing="false" text="Konfiguration">
+              <Menu mnemonicParsing="false" text="Werkzeuge">
                 <items>
-                  <MenuItem mnemonicParsing="false" text="Portkonfiguration" />
-                  <MenuItem mnemonicParsing="false" text="Vorlagen anzeigen" />
+				  <MenuItem mnemonicParsing="false" onAction="#openSnapshotManager" text="Snapshot Manager" />                                    
+                  <MenuItem mnemonicParsing="false" text="Vorlagen Manager" />
                 </items>
               </Menu>
-              <Menu mnemonicParsing="false" text="Werkzeug">
-                <items>
-                  <MenuItem mnemonicParsing="false" text="Zurücksetzen" />
-                        <MenuItem mnemonicParsing="false" text="Diagnose" />
-                </items>
+              <Menu mnemonicParsing="false" text="Hilfe">
+                 <items>
+                    <MenuItem mnemonicParsing="false" text="Hilfe" />
+                 </items>
               </Menu>
-                  <Menu mnemonicParsing="false" text="Hilfe">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Hilfe" />
-                     </items>
-                  </Menu>
             </menus>
           </MenuBar>
             <ToolBar>

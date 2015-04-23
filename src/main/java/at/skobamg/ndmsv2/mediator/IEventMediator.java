@@ -18,11 +18,14 @@ public interface IEventMediator {
 	public void displayMessage(String message);
 	public void startSingleConnection(String ipAddress, String username, String password, String secret);
 	public void openSingleAuthenticationWindow(String IPAddress);
-	public void newMessage(String message);
+	public void newCommandLine(String command);
 	public void addTab(String tabName, ArrayList<IInterface> interfaces);
 	public void setInterfaceCommandHierachy(IInterface interf, String tabName);
 	public void generateCommandHierachy(String tabName);
 	public void saveChangestoSwitch(String tabName, TreeItem<Node> hierachy);
 	public String getConsoleTextFromTab(String tabName);
-
+	public void newMessageLine(String message);
+	public void listenToTab(String tabName);
+	public void openSnapshotManager(String tabName);
+	public void openSnapshotManager();
 }

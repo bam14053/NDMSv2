@@ -9,5 +9,6 @@ import at.skobamg.ndmsv2.model.ITab;
 public interface ITabsController{
 	void addTab(String tabName, ArrayList<IInterface> interfaces, String[] sessionInfo, ArrayList<String> templates, ITemplate template);
 	void addTab(ITab tab);
-	ITab getTabByName(String tabName);
+	public ITab getTabByName(String tabName);
+	public void addListenerToTab(String tabName);
 }
